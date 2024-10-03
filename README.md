@@ -190,21 +190,21 @@ If the user changes the 'DUPLICATE' to 'ORIGINAL', see below, the file on that l
 
 A sample duple.delete file is below:
 
-        Duple Report Generated on 2024-09-27T19:38:24.192660-04:00, commanded by user: shout
+        Duple Report Generated on 2024-10-02T20:43:06.590382-04:00, commanded by user: shout
     ------------------------------------------------------------------------------------------
     Summary Statistics:
     Total Files.............................................................................10
-    Ignored Files............................................................................0
+    Ignored Files............................................................................2
     Duplicate Files..........................................................................6
-    Duplicate Groups.........................................................................4
-    Total Size (duplicates).............................................................2.1 kB
-    Total Size (all files)..............................................................9.7 kB
+    Duplicate Groups.........................................................................2
+    Total Size (duplicates).............................................................2.7 kB
+    Total Size (all files).............................................................32.6 kB
     Hash Algorithm......................................................................sha256
-    File System Traversal Time (seconds)...............................................0.00757
-    Pre-Processing Files Time (seconds)................................................0.00025
-    Hashing Time (seconds).............................................................0.14561
-    Total Time (seconds)...............................................................0.15347
-    Duple Version........................................................................2.0.0
+    File System Traversal Time (seconds)...............................................0.00645
+    Pre-Processing Files Time (seconds)................................................0.00050
+    Hashing Time (seconds).............................................................0.15670
+    Total Time (seconds)...............................................................0.16371
+    Duple Version........................................................................2.1.6
     Results Written To............................/Users/shout/Desktop/duple_test/duple.delete
 
     ------------------------------------------------------------------------------------------
@@ -220,38 +220,26 @@ A sample duple.delete file is below:
     Instructions to User:
     The sections below describe what action duple will take when 'duple rm' is commanded. The first column is the flag that tells duple what to do:
         ORIGINAL   : means duple will take no action for this file, listed only as a reference to the user
-        DELETE     : means duple will send this file to the trash can or recycling bin, if able
+        DUPLICATE  : means duple will send this file to the trash can or recycling bin, if able
 
     ------------------------------------------------------------------------------------------
     Duplicate Results:
-    ORIGINAL   |    6.1 kB   | /Users/shout/Desktop/duple_test/.DS_Store
-    DUPLICATE  |  484 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/bWFMyHRrutcAxRibDV.txt
+    DUPLICATE  |  565 Bytes  | /Users/shout/Desktop/duple_test/CXnVbEhTJHJmDoSR/JABUvTKiElLxxNeNjZh.txt
+    DUPLICATE  |  565 Bytes  | /Users/shout/Desktop/duple_test/PvNEOcwjFlmMGOUQFnqfDsJVzkOLi/eBTYszALyJXoealOjGj.txt
+    DUPLICATE  |  565 Bytes  | /Users/shout/Desktop/duple_test/PvNEOcwjFlmMGOUQFnqfDsJVzkOLi/MsxAwYDKeBkmUWLRHAsRRJLOA.txt
+    DUPLICATE  |  565 Bytes  | /Users/shout/Desktop/duple_test/PvNEOcwjFlmMGOUQFnqfDsJVzkOLi/mOgjQxE/kTGerbYckSIpJmeXTYUlmnLdQ.txt
+    ORIGINAL   |  565 Bytes  | /Users/shout/Desktop/duple_test/bLeKJEGLsdYxMNeEmUC/ERYCCCDsbfdYGiIFfh.txt
 
-    DUPLICATE  |  962 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/QYlFjmULSV/QofPgusOsvlmKWVluYkWQgevDBE.txt
-    ORIGINAL   |  962 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/FrADugjjVuGUvsN/GhvqDiXptHJvfmDxP.txt
-
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/QYlFjmULSV/HAKhBlspwMkTYtVzTkLoENg.txt
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/BppxnezMcePwzdJLfAEF.txt
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/FrADugjjVuGUvsN/OstZgGsAuyRefYrMWybCOMpSEb.txt
-    ORIGINAL   |  109 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/ewrZSzxOnrkA.txt
-
-    ORIGINAL   |  352 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/KXbShU/TSRNhUlhRSCM.txt
-    DUPLICATE  |  352 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/KXbShU/VfHPJNExNzTadfoHAWfpFVEtXlDZ.txt
-
+    ORIGINAL   |  231 Bytes  | /Users/shout/Desktop/duple_test/CXnVbEhTJHJmDoSR/uWlvcHM.txt
+    DUPLICATE  |  231 Bytes  | /Users/shout/Desktop/duple_test/CXnVbEhTJHJmDoSR/rbevPzGoLmvGXJwsOuKuWXhbDq/FxUfdtjxeRGN.txt
+    DUPLICATE  |  231 Bytes  | /Users/shout/Desktop/duple_test/bLeKJEGLsdYxMNeEmUC/WWwniGsaAkLr.txt
 
 
     ------------------------------------------------------------------------------------------
-    All Files in Scan:
-    ORIGINAL   |    6.1 kB   | /Users/shout/Desktop/duple_test/.DS_Store
-    DUPLICATE  |  484 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/bWFMyHRrutcAxRibDV.txt
-    DUPLICATE  |  962 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/QYlFjmULSV/QofPgusOsvlmKWVluYkWQgevDBE.txt
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/UOotpgGLv/QYlFjmULSV/HAKhBlspwMkTYtVzTkLoENg.txt
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/BppxnezMcePwzdJLfAEF.txt
-    DUPLICATE  |  109 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/FrADugjjVuGUvsN/OstZgGsAuyRefYrMWybCOMpSEb.txt
-    ORIGINAL   |  962 Bytes  | /Users/shout/Desktop/duple_test/PRynXIdIXkAeaIPAQdCoFQSeuzhrK/FrADugjjVuGUvsN/GhvqDiXptHJvfmDxP.txt
-    ORIGINAL   |  109 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/ewrZSzxOnrkA.txt
-    ORIGINAL   |  352 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/KXbShU/TSRNhUlhRSCM.txt
-    DUPLICATE  |  352 Bytes  | /Users/shout/Desktop/duple_test/BKniVYZvtcaiXncTCFAXdwZ/KXbShU/VfHPJNExNzTadfoHAWfpFVEtXlDZ.txt
+    Ignored Files in Scan:
+    IGNORED    |   28.7 kB   |  UNIQUE_FILE_SIZE  | /Users/shout/Desktop/duple_test/.DS_Store
+    IGNORED    |  375 Bytes  |  UNIQUE_FILE_SIZE  | /Users/shout/Desktop/duple_test/bLeKJEGLsdYxMNeEmUC/JsmDv/dioMDVyMZTHeaCJPdCSniu.txt
+
 
 ### Deleting Duplicates
 After the user has reviewed/edited the 'duple.delete' file, you can run the duple rm command.  This command <span style="color:red">**will delete files**</span> specified in duple.delete as 'DUPLICATE'.
