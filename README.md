@@ -36,8 +36,6 @@
   - [0.2.0 Added license](#020-added-license)
   - [0.1.1 Misc. Fixes](#011-misc-fixes)
   - [0.1.0 Initial Release](#010-initial-release)
-
-
 # Project Description
 Duple is a small package that will find and remove duplicate files.
 
@@ -62,13 +60,10 @@ Open PowerShell (Start > [search for powershell]) and copy/paste the following t
 Go to Start > [search for 'edit environment variables for your account'] > Users Variables for [user name] > Select Path in top list box > Click Edit...
 
 Once the window pops up, add to the bottom of the list the result from the PowerShell command above
-
 ## Adding Scripts to Path - Linux / Unix / MacOS
 Open terminal and copy/paste teh following text to the command line:
 
     python3 -c "from duple.info import USER_SCRIPTS_PATH;print(USER_SCRIPTS_PATH)"
-
-
 # Usage
 ## Overall Workflow
 First, open the terminal and navigate to the directory you want to analyze for duplicates.  Then, run 'duple scan', which will make two output files: duple.delete.  Review duple.delete to validate how duple determined which files were original and which were duplicates.  Then, run 'duple rm' to remove the files specified in 'duple.delete'.
@@ -148,7 +143,6 @@ When using stdin, the user must only pipe files into the duple scan.  The most c
 
     Open the `output summary results` file listed above with a text editor for review
     Once review and changes are complete, run `duple rm`
-
 #### Using path
 For the example below, we used the option flags:<br>
     -p for path (. = current directory)<br>
@@ -178,7 +172,7 @@ You can use multiple flags to determine the original, both will be applied.  So,
     Once review and changes are complete, run `duple rm`
 ### Reviewing Results
 <span style="color:red">**ONLY FILES LISTED IN THE 'Duplicate Results' SECTION OF DUPLE.DELETE WILL BE DELETE**<br>
-**THE 'All Files' SECTION IS IGNORED**</span><br>
+**THE 'Ignored Files in Scan' SECTION IS IGNORED**</span><br>
 
 Open 'duple.delete' to review and edit the results.  The user can change the left most column in duple.delete.  The following line would be deleted:
 
@@ -239,8 +233,6 @@ A sample duple.delete file is below:
     Ignored Files in Scan:
     IGNORED    |   28.7 kB   |  UNIQUE_FILE_SIZE  | /Users/shout/Desktop/duple_test/.DS_Store
     IGNORED    |  375 Bytes  |  UNIQUE_FILE_SIZE  | /Users/shout/Desktop/duple_test/bLeKJEGLsdYxMNeEmUC/JsmDv/dioMDVyMZTHeaCJPdCSniu.txt
-
-
 ### Deleting Duplicates
 After the user has reviewed/edited the 'duple.delete' file, you can run the duple rm command.  This command <span style="color:red">**will delete files**</span> specified in duple.delete as 'DUPLICATE'.
 
@@ -268,7 +260,6 @@ For verbose output, each file is listed in the output as it is being deleted:
 If we don't want to see every file, but just a progress bar:
 
     > duple rm
-
 # Help
 The top level help:
     duple
