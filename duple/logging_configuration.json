@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "simple": {
+      "format": "[%(asctime)s] %(levelname)s module: %(module)s, line %(lineno)d -> %(message)s",
+      "datefmt": "%Y-%m-%dT%H:%M:%S%z"
+    },
+    "json": {
+      "()": "duple.logging_formatter.JSONFormatter",
+      "fmt_keys": {
+        "level": "levelname",
+        "message": "message",
+        "timestamp": "timestamp",
+        "logger": "name",
+        "module": "module",
+        "function": "funcName",
+        "line": "lineno",
+        "thread_name": "threadName"
+      }
+    }
+  },
+  "handlers": {
+    "stderr": {
+      "class": "logging.StreamHandler",
+      "level": "WARNING",
+      "formatter": "simple",
+      "stream": "ext://sys.stderr"
+    },
+    "file_json": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "DEBUG",
+      "formatter": "json",
+      "filename": "duple/logs/log.jsonl",
+      "maxBytes": 1000000,
+      "backupCount": 3
+    },
+    "file_debug": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "DEBUG",
+      "formatter": "simple",
+      "filename": "duple/logs/log.log",
+      "maxBytes": 1000000,
+      "backupCount": 3
+    },
+    "queue_handler": {
+      "class": "logging.handlers.QueueHandler",
+      "handlers": [
+        "stderr",
+        "file_json"
+      ],
+      "respect_handler_level": true
+    }
+  },
+  "loggers": {
+    "root": {
+      "level": "DEBUG",
+      "handlers": [
+        "queue_handler"
+      ]
+    }
+  }
+}
