@@ -5,6 +5,8 @@ description = "Duple is a CLI that finds and removes duplicate files."
 authors = ["David Bruce <duple.python@gmail.com>"]
 readme = "README.md"
 license = "GPL-3.0-or-later"
+repository = "https://github.com/dbruce-ae05/duple"
+homepage = "https://github.com/dbruce-ae05/duple"
 keywords = ["duplicate", "lint"]
 
 [tool.poetry.dependencies]
