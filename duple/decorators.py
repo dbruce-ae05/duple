@@ -1,8 +1,9 @@
 import cProfile
 import functools
 import pstats
-from time import perf_counter
+from time import perf_counter, sleep
 from uuid import uuid1
+
 from duple.app_logging import logger, setup_logging
 
 setup_logging()
@@ -91,5 +92,29 @@ def log_func_start_finish_flags(func):
         except Exception as e:
             logger.exception(f"Exception raised in function {funcname}, exception: {str(e)}")
             raise e
+
+    return wrapper
+
+
+def retry(func, max_tries: int = 5, wait_time: float = 0.5):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        retries = 0
+        exceptions_list: list = list()
+        while retries < max_tries:
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                exceptions_list.append(e)
+                logger.info(
+                    f"Retrying function: {func._qualname__}, Retry number: {retries} out of {max_tries}, encountered exception: {e}"
+                )
+                retries += 1
+                sleep(wait_time / 1000)
+
+        raise Exception(
+            f"Max retries, ({max_tries}, of function {func} exceeded, exceptions encountered: {exceptions_list}"
+        )
 
     return wrapper

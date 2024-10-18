@@ -1,17 +1,19 @@
-from dataclasses import dataclass, field
-from pathlib import Path
-from duple.file import File
-from duple.status import Status
-from duple.dispocode import DispoCode
-from tqdm.contrib.concurrent import process_map
-from itertools import repeat
-from duple.library import get_hash
-from humanize import naturalsize
 import os
 from collections import Counter
-from duple.decorators import log_func_time
-from duple.app_logging import logger
+from dataclasses import dataclass, field
+from itertools import repeat
+from pathlib import Path
 
+from humanize import naturalsize
+from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
+
+from duple.app_logging import logger
+from duple.decorators import log_func_time
+from duple.dispocode import DispoCode
+from duple.file import File
+from duple.library import get_hash
+from duple.status import Status
 
 """
 files is the collector the file class, files will:
@@ -44,11 +46,13 @@ class Files(dict):
 
     def _test_fun(self, attribute: str, minimum: bool, files: list[File]) -> list[File]:
         """
-        test_fun returns a list of file objects that pass the test defined by attribute and minimum
+        test_fun returns a list of file objects that pass the test defined by
+        attribute and minimum
 
         Args:
             attribute (str): attribute to test
-            minimum (bool): true if attribute should be the minimum, false if the attribute should be the maxium
+            minimum (bool): true if attribute should be the minimum, false if
+                            the attribute should be the maxium
             files (list[File]): list of file objects to check
 
         Returns:
@@ -68,9 +72,12 @@ class Files(dict):
 
         return [file for file in files if file.__dict__[attribute] == target]
 
+    def generate_path_instance(path: str) -> Path:
+        return Path(path)
+
     @log_func_time
     def read_paths(self, paths: list):
-        for path in paths:
+        for path in tqdm(paths, desc="Pre-processing files"):
             f = File(path)
             self[f.path] = f
 
@@ -83,7 +90,8 @@ class Files(dict):
     @log_func_time
     def pre_process_files(self) -> None:
         """
-        Eliminate files with unique sizes and ignored files, these can not be duplicates
+        Eliminate files with unique sizes and ignored files, these can not be
+        duplicates
         """
         sizes = dict()
         tempfile: File
@@ -205,6 +213,19 @@ class Files(dict):
                 lines.append(line)
             lines.append("")
 
+        return lines
+
+    @log_func_time
+    def create_all_files_output(self) -> list:
+        lines = list()
+        file: File
+        logger.debug("Called Create All Files Output")
+        lines.append(f'{"size (bytes)".rjust(20)} |{"size".center(13)}|path')
+        for file in sorted(self.values(), key=lambda x: x.size, reverse=True):
+            line = f"{str(file.size).rjust(20)} |"
+            line += f"{naturalsize(file.size).center(13)}|"
+            line += f" {file.path}"
+            lines.append(line)
         return lines
 
     @log_func_time

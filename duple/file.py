@@ -1,9 +1,10 @@
+import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
-import hashlib
-from duple.status import Status
-from duple.dispocode import DispoCode
+
 from duple.app_logging import logger
+from duple.dispocode import DispoCode
+from duple.status import Status
 
 
 @dataclass

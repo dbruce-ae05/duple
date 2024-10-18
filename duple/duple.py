@@ -1,34 +1,36 @@
-from time import perf_counter
-import click
-from tqdm.contrib.concurrent import process_map
-from itertools import repeat
-from duple.__version__ import __version__
-from duple.library import (
-    get_available_hashes,
-    timed_get_hash,
-    get_max_workers,
-    gen_test_files,
-    tree,
-    generate_options_list,
-    create_output,
-    remove_empty_directories,
-    duple_outputs_exist,
-    get_delete_paths,
-    get_latest_file,
-    follow_log,
-    delete_logs,
-)
 import os
-from pathlib import Path
 import sys
 from collections import Counter
-from tqdm import tqdm
-from duple.files import Files
-from send2trash import send2trash
+from itertools import repeat
+from pathlib import Path
+from time import perf_counter
+
+import click
 from humanize import naturalsize
-from duple.app_logging import setup_logging, logger
-from duple.decorators import log_func_with_args, log_func_start_finish_flags
+from send2trash import send2trash
+from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
+
+from duple.__version__ import __version__
+from duple.app_logging import logger, setup_logging
+from duple.decorators import log_func_start_finish_flags, log_func_with_args
+from duple.files import Files
 from duple.info import LOGS_PATH
+from duple.library import (
+    create_output,
+    delete_logs,
+    duple_outputs_exist,
+    follow_log,
+    gen_test_files,
+    generate_options_list,
+    get_available_hashes,
+    get_delete_paths,
+    get_latest_file,
+    get_max_workers,
+    remove_empty_directories,
+    timed_get_hash,
+    tree,
+)
 
 """
 To Do:
@@ -228,6 +230,12 @@ def rm(verbose: bool, dry_run: bool, leave_empty_dirs: bool) -> None:
     "--number_of_cpus", "-ncpu", type=click.INT, default=get_max_workers(), help="maximum number of cpu cores to use"
 )
 @click.option("--chunksize", "-ch", type=click.INT, default=2, help="chunksize to give to workers, minimum of 2")
+@click.option(
+    "--output_all_files",
+    "-oaf",
+    is_flag=True,
+    help="Only scan and output all files, do not analyze for duplicates'",
+)
 @log_func_start_finish_flags
 @log_func_with_args
 def scan(
@@ -244,6 +252,7 @@ def scan(
     modified_max: bool,
     accessed_min: bool,
     accessed_max: bool,
+    output_all_files: bool,
     number_of_cpus: int = get_max_workers(),
     chunksize: int = 2,
 ) -> None:
@@ -347,11 +356,19 @@ def scan(
 
     # create files
     summary_statistics["Pre-Processing Files Time (seconds)"] = perf_counter()
-    files = Files(max_workers=number_of_cpus, chunksize=chunksize, hashalgo=hash)
+    files: Files = Files(max_workers=number_of_cpus, chunksize=chunksize, hashalgo=hash)
     files.read_paths(filelist)
     summary_statistics["Pre-Processing Files Time (seconds)"] = (
         perf_counter() - summary_statistics["Pre-Processing Files Time (seconds)"]
     )
+
+    if output_all_files:
+        lines = files.create_all_files_output()
+        with open("duple.all_files", "w", encoding="utf-8") as f:
+            for line in lines:
+                f.write(f"{line}\n")
+        summary_statistics["Results Written To (All Files)"] = str(Path(path).joinpath("duple.all_files").absolute())
+        logger.debug("Outputting all files only, exiting execution")
 
     # analyze duplicates
     summary_statistics["Hashing Time (seconds)"] = perf_counter()
