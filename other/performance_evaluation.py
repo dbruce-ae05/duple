@@ -1,10 +1,15 @@
-import click
-from time import perf_counter
-import sys
-from pathlib import Path
 import os
 import subprocess
+import sys
+from itertools import repeat
+from pathlib import Path
 from statistics import mean, median, mode, stdev
+from time import perf_counter
+
+import click
+from tqdm.contrib.concurrent import process_map, thread_map
+
+from duple.library import get_hash
 
 
 @click.group()
@@ -79,3 +84,62 @@ def test_stdin(compose_file: click.File) -> str:
 
     print()
     print(f"Elapsed time: {round(perf_counter() - start,4)}")
+
+
+def get_files(path: Path) -> list:
+    files: list = list()
+    for r, ds, fs in os.walk(path):
+        for f in fs:
+            if Path(r).joinpath(f).exists:
+                files.append(Path(r).joinpath(f))
+    return files
+
+
+def test_hash_multi_thread(files: list) -> None:
+    start = perf_counter()
+    thread_map(
+        get_hash,
+        files,
+        repeat("sha256"),
+        max_workers=80,
+        chunksize=15,
+        desc="hashing files",
+    )
+    finish = perf_counter()
+    return finish - start
+
+
+def test_hash_multi_process(files: list) -> int:
+    start = perf_counter()
+    process_map(
+        get_hash,
+        files,
+        repeat("sha256"),
+        max_workers=80,
+        chunksize=15,
+        desc="hashing files",
+    )
+    finish = perf_counter()
+    return finish - start
+
+
+@perf_test.command()
+@click.option("--path", "-p", type=click.Path())
+@click.option("--trials", "-t", type=click.INT, default=2)
+def test_hashes_multi_process_vs_thread(path: Path, trials: int) -> None:
+    funcs = [test_hash_multi_thread, test_hash_multi_process]
+
+    max_fun_nam = max([len(fun.__name__) for fun in funcs])
+    files = get_files(path)
+    stats = dict()
+
+    for _ in range(trials):
+        for fun in funcs:
+            if fun.__name__ not in stats.keys():
+                stats[fun.__name__] = list()
+            result = fun(files)
+            stats[fun.__name__].append(result)
+
+    os.system("clear")
+    for func, result in stats.items():
+        print(f"{func.ljust(max_fun_nam)} was run for {trials=}, stats: {describe(result, 5)} seconds")

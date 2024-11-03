@@ -5,8 +5,7 @@ from itertools import repeat
 from pathlib import Path
 
 from humanize import naturalsize
-from tqdm import tqdm
-from tqdm.contrib.concurrent import process_map
+from tqdm.contrib.concurrent import thread_map
 
 from duple.app_logging import logger
 from duple.decorators import log_func_time
@@ -75,11 +74,27 @@ class Files(dict):
     def generate_path_instance(path: str) -> Path:
         return Path(path)
 
+    def read_path(self, path: str) -> File:
+        return File(path)
+
     @log_func_time
     def read_paths(self, paths: list):
-        for path in tqdm(paths, desc="Pre-processing files"):
-            f = File(path)
-            self[f.path] = f
+        file_s = thread_map(
+            self.read_path,
+            paths,
+            max_workers=self.max_workers * 50,
+            chunksize=self.chunksize * 5,
+            desc="Pre-processing files",
+        )
+
+        for file in file_s:
+            self[file.path] = file
+
+    # @log_func_time
+    # def read_paths(self, paths: list):
+    #     for path in tqdm(paths, desc="Pre-processing files"):
+    #         f = File(path)
+    #         self[f.path] = f
 
     def get_paths(self) -> list:
         return list(self.keys())
@@ -125,12 +140,12 @@ class Files(dict):
         logger.debug("ID of Potential Duplicates FINISH")
 
         logger.debug("Hashing Files START")
-        hashes = process_map(
+        hashes = thread_map(
             get_hash,
             potential_duplicates,
             repeat(self.hashalgo),
-            max_workers=self.max_workers,
-            chunksize=self.chunksize,
+            max_workers=self.max_workers * 10,
+            chunksize=self.chunksize * 5,
             desc="hashing files",
         )
         logger.debug("Hashing Files FINISH")
