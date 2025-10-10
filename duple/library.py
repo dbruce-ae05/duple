@@ -149,6 +149,9 @@ def gen_test_files(test_path_root: Path, numdirs: int, numfiles: int, max_file_s
 
 def get_hash(path: str, hash: str) -> str | str:
     try:
+        if not Path(path).exists():
+            return "", path
+
         with open(path, "rb") as f:
             digest = hashlib.file_digest(f, hash)
         return digest.hexdigest(), path
@@ -267,7 +270,7 @@ def create_output(inputs: list, output_dir: str, dupes: list, ignored_files: lis
     max_len_key = max([len(k) for k in summary_statistics.keys()])
     max_len_val = max([len(str(v)) for v in summary_statistics.values()])
 
-    section_divider = f"\n{''.rjust(max_len_key + max_len_val + 10,'-')}\n"
+    section_divider = f"\n{''.rjust(max_len_key + max_len_val + 10, '-')}\n"
 
     # output_json = Path(output_dir).joinpath('duple.json')
     output_delete = Path(output_dir).joinpath("duple.delete")
@@ -278,7 +281,7 @@ def create_output(inputs: list, output_dir: str, dupes: list, ignored_files: lis
             value = summary_statistics[key]
 
         click.secho(
-            f'{key.ljust(max_len_key + max_len_val - len(str(value)) + 10, ".")}{click.style(str(value), fg = "green")}'
+            f"{key.ljust(max_len_key + max_len_val - len(str(value)) + 10, '.')}{click.style(str(value), fg='green')}"
         )
 
     click.secho()
@@ -297,7 +300,7 @@ def create_output(inputs: list, output_dir: str, dupes: list, ignored_files: lis
         f.write(section_divider)
         f.write("Summary Statistics:\n")
         for key, value in summary_statistics.items():
-            f.write(f'{key.ljust(max_len_key + max_len_val - len(str(value)) + 10,".")}{str(value)}\n')
+            f.write(f"{key.ljust(max_len_key + max_len_val - len(str(value)) + 10, '.')}{str(value)}\n")
         f.write(section_divider)
         f.write("Inputs (True = minimum, False = Maximum): \n")
         for input in inputs:
