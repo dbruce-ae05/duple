@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "duple"
-version = "2.1.7"
+version = "2.1.8"
 description = "Duple is a CLI that finds and removes duplicate files."
 authors = ["David Bruce <duple.python@gmail.com>"]
 readme = "README.md"
