@@ -1,19 +1,21 @@
+import getpass
 import hashlib
-from pathlib import Path
+import json
 import os
-from time import perf_counter
-from tqdm import tqdm
+from datetime import datetime as dt
+from datetime import timezone
+from pathlib import Path
 from random import choice, choices, randint
 from string import ascii_letters
-from send2trash import send2trash
-import json
-from datetime import datetime as dt, timezone
+from time import perf_counter, sleep
+from typing import Iterator
+
 import click
+from send2trash import send2trash
+from tqdm import tqdm
+
 from duple.decorators import log_func_time, log_func_with_args
 from duple.info import LOGS_PATH
-
-from typing import Iterator
-from time import sleep
 
 
 def get_latest_file(inpath: str, filter: str = None, recurse: bool = False) -> str:
@@ -295,7 +297,7 @@ def create_output(inputs: list, output_dir: str, dupes: list, ignored_files: lis
 
     with open(output_delete, "w", encoding="utf-8") as f:
         f.write(
-            f"Duple Report Generated on {dt.now(timezone.utc).astimezone().isoformat()}, commanded by user: {os.getlogin()}"
+            f"Duple Report Generated on {dt.now(timezone.utc).astimezone().isoformat()}, commanded by user: {getpass.getuser()}"
         )
         f.write(section_divider)
         f.write("Summary Statistics:\n")
