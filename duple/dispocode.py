@@ -6,6 +6,8 @@ class DispoCode(Enum):
     UNIQUE_HASH = auto()
     PERMISSION_DENIED = auto()
     NOT_SET = auto()
+    SYMLINK = auto()
+    NOT_FILE = auto()
 
     def longest_code():
         codes = [value.name for value in DispoCode]

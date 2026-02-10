@@ -13,13 +13,13 @@ class File:
     status: Status = field(init=False, default=Status.NOT_ANALYZED)
     name: str = field(init=False, default="")
     namelength: int = field(init=False, default=0)
-    twins: list = field(init=False, default=0)
+    twins: list = field(init=False, default_factory=list)
     size: int = field(init=False, default=0)
     atime: float = field(init=False, default=0)
     ctime: float = field(init=False, default=0)
     mtime: float = field(init=False, default=0)
     hash: str = field(init=False, default="")
-    depth: str = field(init=False, default=0)
+    depth: int = field(init=False, default=0)
     message: str = field(init=False, default="")
     dispocode: DispoCode = field(init=False, default=DispoCode.NOT_SET)
 
@@ -41,12 +41,22 @@ class File:
         self.name = self.path.name
         self.namelength = len(self.name)
 
-        if self.path.is_file():
-            self.size = self.path.stat().st_size
-            self.atime = self.path.stat().st_atime
-            self.ctime = self.path.stat().st_ctime
-            self.mtime = self.path.stat().st_mtime
-        else:
-            self.status = Status.IGNORED
-            self.message = "File Path Does Not Exist or Unrecognized Characters in File Path/Name"
-            logger.info(f"File Ignored, pathlib.Path.is_file() == False, {str(self.path.absolute())}")
+        try:
+            if self.path.is_symlink():
+                self.status = Status.IGNORED
+                self.dispocode = DispoCode.SYMLINK
+                return
+
+            if self.path.is_file():
+                self.size = self.path.stat().st_size
+                self.atime = self.path.stat().st_atime
+                self.ctime = self.path.stat().st_ctime
+                self.mtime = self.path.stat().st_mtime
+                return
+        except OSError:
+            pass
+
+        self.status = Status.IGNORED
+        self.dispocode = DispoCode.NOT_FILE
+        self.message = "File Path Does Not Exist or Unrecognized Characters in File Path/Name"
+        logger.info(f"File Ignored, pathlib.Path.is_file() == False, {str(self.path.absolute())}")

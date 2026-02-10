@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "duple"
-version = "2.1.8"
+version = "2.2.3"
 description = "Duple is a CLI that finds and removes duplicate files."
 authors = ["David Bruce <duple.python@gmail.com>"]
 readme = "README.md"
@@ -38,41 +38,45 @@ perf_test = "other.performance_evaluation:perf_test"
 
 [tool.poe.tasks]
 
-    [tool.poe.tasks.build_test]
-    sequence = ["sync", "ruffcheck", "ruffformat", "build", "install", "test", "delete_logs"]
+[tool.poe.tasks.build_test]
+sequence = [
+  "sync",
+  "ruffcheck",
+  "ruffformat",
+  "build",
+  "install",
+  "test",
+  "delete_logs",
+]
 
-    [tool.poe.tasks.sync]
-    script = "other.publish_actions:sync_with_pyproject"
-    print_result = true
+[tool.poe.tasks.sync]
+script = "other.publish_actions:sync_with_pyproject"
+print_result = true
 
-    [tool.poe.tasks.delete_logs]
-    script = "duple.library:delete_logs"
-    print_result = true
+[tool.poe.tasks.delete_logs]
+script = "duple.library:delete_logs"
+print_result = true
 
-    [tool.poe.tasks.install]
-    cmd = "poetry install" 
+[tool.poe.tasks.install]
+cmd = "pipx install . --editable --force"
 
-    [tool.poe.tasks.build]
-    cmd = "poetry build"
+[tool.poe.tasks.build]
+cmd = "poetry build"
 
-    [tool.poe.tasks.test]
-    cmd = "pytest"
+[tool.poe.tasks.test]
+cmd = "pytest"
 
-    [tool.poe.tasks.ruffcheck]
-    cmd = "ruff check"
+[tool.poe.tasks.ruffcheck]
+cmd = "ruff check"
 
-    [tool.poe.tasks.ruffformat]
-    cmd = "ruff format"
+[tool.poe.tasks.ruffformat]
+cmd = "ruff format"
 
 [tool.ruff]
 line-length = 120
 fix = true
 show-fixes = true
-lint.ignore = [ 
-            "E701", 
-            "E702"
-         ]
+lint.ignore = ["E701", "E702"]
 
-    [tool.ruff.format]
-    docstring-code-line-length = 120
-
+[tool.ruff.format]
+docstring-code-line-length = 120
